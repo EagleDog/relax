@@ -2,7 +2,7 @@
 
 
 class Particle
-  # attr_reader :x, :y
+  attr_reader :x, :y
   
   def initialize(x, y)
     @image = Gosu::Image.new("assets/particles/particle1.png")
@@ -17,6 +17,7 @@ class Particle
     @y = @y + @vel_y
 
     @x += @vel_x
+
 
     # after(1550) {self.destroy}
   end

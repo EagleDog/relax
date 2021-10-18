@@ -7,7 +7,8 @@ class Player
   def initialize
     @image = Gosu::Image.new("assets/knight.png")
     @boom = Gosu::Sample.new("assets/audio/explosion.ogg")
-    @x = @y = @vel_x = @vel_y = @angle = 0.0
+    @x = @y = 300
+    @vel_x = @vel_y = @angle = 0.0
     @score = 0
     @direction = 1
   end
@@ -67,17 +68,15 @@ class Player
     @x += @vel_x
     @y += @vel_y
     walls
-#    @x %= 1140
-    @y %= 740
     
-    @vel_x *= 0.8
-    @vel_y *= 0.8
+    @vel_x *= 0.85
+    @vel_y *= 0.85
   end
   
   def draw
-    @image.draw_rot(@x, @y, ZOrder::PLAYER, 0, 0.5, 0.5, @direction, 1)
+    @image.draw_rot(@x, @y, Z::PLAYER, 0, 0.5, 0.5, @direction, 1)
 #draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.5, scale_x = 1, scale_y = 1)
-#    @image.draw_rot(@x, @y, ZOrder::PLAYER, @angle)
+#    @image.draw_rot(@x, @y, Z::PLAYER, @angle)
   end
   
 
@@ -85,8 +84,8 @@ class Player
     stars.reject! do |star|
       if Gosu.distance(@x, @y, star.x, star.y) < 35
         @score += 10
-        @boom.play
-        5.times {particles.push(Particle.new(@x, @y))}
+        @boom.play if rand(4) == 1
+        3.times {particles.push(Particle.new(@x, @y))}
         true
       else
         false
