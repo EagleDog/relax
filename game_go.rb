@@ -5,76 +5,91 @@
 #                                             #
 #                                             #
 
-require 'gosu'
 
-require_relative 'rb/beginning.rb'   # require relevant files
-# require_relative 'rb/levels.rb'
-# require_relative 'rb/objects.rb'
-# require_relative 'rb/gui.rb'
-# require_relative 'rb/ending.rb'
-require_relative 'rb/characters.rb'
+require "gosu"
+require_relative "rb/keyboard"
+require_relative "rb/player"
+require_relative "rb/units"
+#require_relative "rb/gamestate"
+require_relative "rb/particles"
 
-module Zorder  # define Zorders
-	GUI = 400
-	Text = 300
-	Main_Character = 200
-	Main_Character_Particles = 199
-	Object = 50
-	Projectile = 15
-	Particle = 5
+module ZOrder
+  BACKGROUND, STARS, PLAYER, UI = *0..3
 end
 
-module Colors   # define colors
-	Dark_Orange = Gosu::Color.new(0xFFCC3300)
-	White = Gosu::Color.new(0xFFFFFFFF)
-	Blue_Laser = Gosu::Color.new(0xFF86EFFF)
+
+class Star
+  attr_reader :x, :y
+  
+  def initialize(animation)
+    @animation = animation
+    @color = Gosu::Color::BLACK.dup
+    @color.red = rand(256 - 40) + 40
+    @color.green = rand(256 - 40) + 40
+    @color.blue = rand(256 - 40) + 40
+    @x = rand * 640
+    @y = rand * 480
+  end
+  
+  def draw
+    img = @animation[Gosu.milliseconds / 100 % @animation.size]
+    img.draw(@x - img.width / 2.0, @y - img.height / 2.0,
+        ZOrder::STARS, 1, 1, @color, :add)
+  end
 end
 
-#
-#  GameWindow Class
-#
-class GameWindow < (Example rescue Gosu::Window) # < Chingu::Window
+
+class World < (Gamestate rescue Gosu::Window)
   def initialize
-    super(800,600,false)
-    $intro = true     # define constants used in game
-    $max_x = 815
-    $max_y = 615
-    $scr_edge = 15
-    $cooling_down = 70
-    $star_grab = "media/audio/star_pickup.ogg" #Sound["media/audio/star_pickup.ogg"]
-    $power_up = "media/audio/power_up.ogg" #Sound["media/audio/power_up.ogg"]
-    self.caption = " __ __ Chingu Gem Go __ __ "
-    @cursor = true                        # false hides cursor
+    super 1100, 700 #640, 480
+    self.caption = "__ __ Relax __ __"
+    
+    @background_image = Gosu::Image.new("assets/living_room.png", tileable: true)
+    
+    @player = Player.new
+    @player.warp(320, 240)
+    
+    @star_anim = Gosu::Image::load_tiles("assets/star.png", 25, 25)
+    @stars = []
+    @particles = []
 
-##==========>>>>>
-##__________>>>>>
-
-    self.input = { :esc => :exit,         # global controls
-                 [:q, :l] => :pop,
-                 :z => :log,
-                 :r => lambda{current_game_state.setup}
-               }
-
-
-#    retrofy   # use retrofy for improved scaling of images
+    @font = Gosu::Font.new(20)
+    make_particles
   end
 
-  def setup
-    push_game_state(Beginning) # start by pushing Beginning gamestate
+  def make_particles
+    5.times {@particles.push(Particle.new(@player.x, @player.y)) }
+    @particles.each.reject
   end
+  
+  def update
+    keypress
 
-  def log   # pressing 'z' at any time returns name of current gamestate
-    puts $window.current_game_state
+    @player.move
+    @player.collect_stars(@stars, @particles)
+
+    @particles.each { |particle| particle.movement }
+    
+    if rand(100) < 4 and @stars.size < 25
+      @stars.push(Star.new(@star_anim))
+    end
   end
-
-  def pop  # pressing 'q' or 'l' at any time backs out of current gamestate
-    if $window.current_game_state.to_s == "Introduction" or $window.current_game_state.to_s == "Level_1" then
-      pop_game_state(:setup => true)
-    elsif $window.current_game_state.to_s != "OpeningCredits"
-      pop_game_state(:setup => false)
+  
+  def draw
+    @background_image.draw(0, 0, ZOrder::BACKGROUND)
+    @player.draw
+    @stars.each { |star| star.draw }
+    @particles.each { |particle| particle.draw }
+    @font.draw_text("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, Gosu::Color::YELLOW)
+  end
+  
+  def button_down(id)
+    if id == Gosu::KB_ESCAPE
+      close
+    else
+      super
     end
   end
 end
 
-
-GameWindow.new.show if __FILE__ == $0   #Game.new.show alternate window class
+World.new.show if __FILE__ == $0
