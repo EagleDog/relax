@@ -20,3 +20,24 @@ class Star
         Z::STARS, 1, 1, @color, :add)
   end
 end
+
+
+class ToyChest
+  attr_reader :x, :y
+
+  def initialize
+    @image = Gosu::Image.new("assets/toy_chest.png")
+    @x = 900
+    @y = 400
+  end
+
+  def empty
+    @image = Gosu::Image.new("assets/empty_chest.png")
+  end
+
+  def draw
+    @image.draw(@x, @y, 3)
+  end
+
+end
+

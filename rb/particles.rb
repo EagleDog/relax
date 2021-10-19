@@ -5,7 +5,14 @@ class Particle
   attr_reader :x, :y
   
   def initialize(x, y)
-    @image = Gosu::Image.new("assets/particles/particle1.png")
+    part_num = rand(30) + 1
+    particle = "obj" + part_num.to_s
+    @image = Gosu::Image.new("assets/particles/" + particle + ".png")
+    @color = Gosu::Color::BLACK.dup
+    @color.red = rand(256 - 100) + 40
+    @color.green = rand(256 - 100) + 40
+    @color.blue = rand(256 - 100) + 40
+    @color.alpha = 255
     @x = x
     @y = y
     @vel_y = rand(10) -15 # Vertical velocity
@@ -23,6 +30,6 @@ class Particle
   end
 
   def draw
-    @image.draw(@x, @y, 5)
+    @image.draw(@x, @y, 5, 0.5, 0.5) #, @color, :add)
   end
 end

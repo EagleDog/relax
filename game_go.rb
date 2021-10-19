@@ -24,14 +24,14 @@ class World < (Gamestate rescue Gosu::Window)
     super 1100, 700 #640, 480
     self.caption = "__ __ Relax __ __"
 
-    @background_image = Gosu::Image.new("assets/living_room.png", tileable: true)
+    @img_back = Gosu::Image.new("assets/world.png", tileable: true)
+
+    @toy_chest = ToyChest.new
+
     @player = Player.new
     
     @chars = []
     30.times { @chars.push(Unit.new) }
-    # @char1 = Unit.new
-
-    # @char1.warp(rand(1000) - 100, rand(700) - 100)
 
     @star_anim = Gosu::Image::load_tiles("assets/star.png", 25, 25)
     @stars = []
@@ -71,12 +71,15 @@ class World < (Gamestate rescue Gosu::Window)
   end
   
   def draw
-    @background_image.draw(0, 0, Z::BACKGROUND)
+    @img_back.draw(0, 0, Z::BACKGROUND)
+    @toy_chest.draw
+
     @player.draw
     @chars.each { |char| char.draw }
     @stars.each { |star| star.draw }
     @particles.each { |particle| particle.draw }
     @font.draw_text("Score: #{@player.score}", 10, 10, Z::UI, 1.0, 1.0, Gosu::Color::YELLOW)
+
   end
   
   def button_down(id)
