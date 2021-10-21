@@ -27,8 +27,8 @@ class ToyChest
 
   def initialize
     @image = Gosu::Image.new("assets/toy_chest.png")
-    @x = 900
-    @y = 400
+    @x = 600
+    @y = 500
   end
 
   def empty

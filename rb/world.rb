@@ -6,25 +6,12 @@
 #                                             #
 
 
-require "gosu"
-require_relative "rb/keyboard"
-require_relative "rb/player"
-require_relative "rb/units"
-require_relative "rb/objects"
-#require_relative "rb/gamestate"
-require_relative "rb/particles"
-
-module Z
-  BACKGROUND, STARS, UNIT, PLAYER, UI = *0..4
-end
-
-
 class World < (Gamestate rescue Gosu::Window)
   def initialize
     super 1100, 700 #640, 480
     self.caption = "__ __ Relax __ __"
 
-    @img_back = Gosu::Image.new("assets/world.png", tileable: true)
+    @img_back = Gosu::Image.new("assets/world.png")
 
     @toy_chest = ToyChest.new
 
@@ -54,6 +41,7 @@ class World < (Gamestate rescue Gosu::Window)
   end
   
   def update
+
     keypress
 
     @player.move
@@ -90,5 +78,3 @@ class World < (Gamestate rescue Gosu::Window)
     end
   end
 end
-
-World.new.show if __FILE__ == $0

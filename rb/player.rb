@@ -13,62 +13,57 @@ class Player
     @direction = 1
   end
   
-  def warp(x, y)
-    @x, @y = x, y
-  end
+  # def warp(x, y)
+  #   @x, @y = x, y
+  # end
   
   def go_left
+    object_collision
     @vel_x -= 1
     @x -= 5
     @direction = -1
   end
   
   def go_right
+    object_collision
     @vel_x += 1
     @x += 5
     @direction = 1
   end
   
   def go_up
+    object_collision
     @vel_y -= 1
     @y -= 5
   end
 
   def go_down
+    object_collision
     @vel_y += 1
     @y += 5
   end
 
-  def is_hall
-    if @y > 300 and @y < 500
-      true
-    else
-      false
+  def walls
+    if @x > 1080 then @x = 1080 end
+    if @x < 20 then @x = 20 end
+    if @y > 680 then @y = 680 end
+    if @y < 20 then @y = 20 end
+  end
+
+  def object_collision  
+    if check_collisions(@x, @y) == true
+      @x = x
+      @y = y
     end
   end
 
-  def walls
-    if @x > 1080
-      @x = 1080
-#      is_hall ? @x = -40 : @x = 1110
-    end
-    if @x < 20
-      @x = 20
-#      is_hall ? @x = 1140 : @x = -10
-    end
-    if @y > 680
-      @y = 680
-    end
-    if @y < 20
-      @y = 20
-    end
-  end
-  
   def move
+    x = @x
+    y = @y
     @x += @vel_x
     @y += @vel_y
     walls
-    
+
     @vel_x *= 0.85
     @vel_y *= 0.85
   end
