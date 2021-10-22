@@ -1,68 +1,66 @@
 # Encoding: UTF-8
 
 
-class Player
+class Player < Chingu::GameObject
   attr_reader :score, :x, :y
   
   def initialize
-    @image = Gosu::Image.new("assets/knight.png")
+    @image = Gosu::Image.new("assets/characters/knight.png")
     @boom = Gosu::Sample.new("assets/audio/explosion.ogg")
     @x = @y = 300
     @vel_x = @vel_y = @angle = 0.0
     @score = 0
     @direction = 1
+    @prev_x = 0
+    @prev_y = 0
   end
-  
-  # def warp(x, y)
-  #   @x, @y = x, y
-  # end
-  
+
+  def get_coordinates
+    @prev_x = @x
+    @prev_y = @y
+  end
+
   def go_left
-    object_collision
     @vel_x -= 1
     @x -= 5
     @direction = -1
   end
   
   def go_right
-    object_collision
     @vel_x += 1
     @x += 5
     @direction = 1
   end
   
   def go_up
-    object_collision
     @vel_y -= 1
     @y -= 5
   end
 
   def go_down
-    object_collision
     @vel_y += 1
     @y += 5
   end
 
   def walls
-    if @x > 1080 then @x = 1080 end
-    if @x < 20 then @x = 20 end
-    if @y > 680 then @y = 680 end
-    if @y < 20 then @y = 20 end
+    if @x > 1050 then @x = 1050 end
+    if @x < 50 then @x = 50 end
+    if @y > 650 then @y = 650 end
+    if @y < 50 then @y = 50 end
   end
 
   def object_collision  
     if check_collisions(@x, @y) == true
-      @x = x
-      @y = y
+      @x = @prev_x
+      @y = @prev_y
     end
   end
 
   def move
-    x = @x
-    y = @y
     @x += @vel_x
     @y += @vel_y
     walls
+    object_collision
 
     @vel_x *= 0.85
     @vel_y *= 0.85

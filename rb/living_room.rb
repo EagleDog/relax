@@ -6,10 +6,14 @@
 #                                             #
 
 
-class World < Chingu::Window
+class LivingRoom < Chingu::GameState #(Gamestate rescue Gosu::Window)
   def initialize
-    super 1100, 700 #640, 480
-    self.caption = "__ __ Relax __ __"
+    super
+    #super 1100, 700 #640, 480
+#    self.caption = "__ __ Relax __ __"
+
+    self.input = { :p => Pause, :r => lambda{ current_game_state.setup } }
+
 
     @img_back = Gosu::Image.new("assets/world.png")
 
@@ -19,7 +23,7 @@ class World < Chingu::Window
     
     @chars = []
     30.times { @chars.push(Unit.new) }
-
+    @chars.each { |char| char.new_spot }
     @star_anim = Gosu::Image::load_tiles("assets/star.png", 25, 25)
     @stars = []
     @particles = []
@@ -41,24 +45,27 @@ class World < Chingu::Window
   end
   
   def update
-
+    super
+    @player.get_coordinates
     keypress
 
     @player.move
     @player.collect_stars(@stars, @particles)
 
-    @chars.each { |char| char.move
+    @chars.each { |char| char.get_coordinates
+                         char.move
                          char.collect_stars(@stars, @particles) }
 
     @particles.each { |particle| particle.movement }
     destroy_particles(@particles)
     
-    if rand(30) < 15 and @stars.size < 80
-      3.times { @stars.push(Star.new(@star_anim)) }
-    end
+    # if rand(30) < 15 and @stars.size < 80
+    #   3.times { @stars.push(Star.new(@star_anim)) }
+    # end
   end
   
   def draw
+    super
     @img_back.draw(0, 0, Z::BACKGROUND)
     @toy_chest.draw
 
@@ -70,12 +77,12 @@ class World < Chingu::Window
 
   end
   
-  def button_down(id)
-    if id == Gosu::KB_ESCAPE
-      close
-    else
-      super
-    end
-  end
+  # def button_down(id)
+  #   if id == Gosu::KB_ESCAPE
+  #     close
+  #   else
+  #     super
+  #   end
+  # end
 end
 

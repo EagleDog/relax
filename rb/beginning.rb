@@ -1,25 +1,25 @@
 #
 #  BEGINNING GAMESTATE
 #    this gamestate essentially just plays the opening music and pushes the OpeningCredits gamestate
-class Beginning < (Gamestate rescue Gosu::Window) # < Chingu::GameState
-  #trait :timer
+class Beginning < Chingu::GameState #(Gamestate rescue Gosu::Window) # < Chingu::GameState
+  trait :timer
   def setup
-    self.input = { :esc => :exit } #, [:enter, :return] => OpeningCredits, :p => Pause, :r => lambda{current_game_state.setup} }
-    $music = Song["media/audio/music/intro_song.ogg"]
-    $music.volume = 0.9
-    $music.play(true)
-    after(5) { push_game_state(Chingu::GameStates::FadeTo.new(OpeningCredits.new, :speed => 8)) }
+   self.input = { :esc => :exit } #, [:enter, :return] => Opening1, :p => Pause, :r => lambda{current_game_state.setup} }
+   $music = Gosu::Song["assets/audio/intro_song.ogg"]
+   $music.volume = 0.9
+   $music.play(true)
+   after(5) { push_game_state(Chingu::GameStates::FadeTo.new(Opening1.new, :speed => 8)) }
   end
 end
 
 #
 #  PAUSE GAMESTATE
 #    pressing 'P' at any time pauses the current gamestate (except possibly during fades)
-class Pause < (Gamestate rescue Gosu::Window)
+class Pause <  Chingu::GameState #(Gamestate rescue Gosu::Window)
   def initialize(options = {})
     super
-#    @title = Chingu::Text.create(:text=>"PAUSED (press 'P' to un-pause)", :y=>110, :size=>30, :color => Color.new(0xFF00FF00), :zorder=>1000 )
-#    @title.x = 400 - @title.width/2
+    @title = Chingu::Text.create(:text=>"PAUSED (press 'P' to un-pause)", :y=>110, :size=>30, :color => Colors::Dark_Orange, :zorder=>1000 )
+    @title.x = 400 - @title.width/2
     self.input = { :p => :un_pause, :r => :reset }
     $music.pause
   end
@@ -39,24 +39,24 @@ end
 #
 #  OPENING CREDITS GAMESTATE
 #    Gosu logo with animated highlights 
-class OpeningCredits < (Gamestate rescue Gosu::Window)
-#  trait :timer
+class Opening1 <  Chingu::GameState
+  trait :timer
   def setup
     self.input = { :esc => :exit, [:enter, :return] => :intro, :p => Pause, :r => lambda{current_game_state.setup} }
-    @beam = Highlight.create(:x => 66, :y => 300)  # Highlights are defined in objects.rb
-    @beam2 = Highlight2.create(:x => 0, :y => 300)
-    @beam3 = Highlight.create(:x => -500, :y => 300)
+    @beam = Highlight.create(:x => 116, :y => 360)  # from intro_objects.rb
+    @beam2 = Highlight2.create(:x => 50, :y => 360)
+    @beam3 = Highlight.create(:x => -400, :y => 360)
     after (3900) {
-      push_game_state(Chingu::GameStates::FadeTo.new(OpeningCredits2.new, :speed => 8))
+      push_game_state(Chingu::GameStates::FadeTo.new(Opening2.new, :speed => 8))
     }
   end
 
   def intro # pressing 'enter' skips ahead to the Introduction
-    push_game_state(Chingu::GameStates::FadeTo.new(Introduction.new, :speed => 11))
+    push_game_state(Chingu::GameStates::FadeTo.new(Opening2.new, :speed => 11)) #Introduction.new, :speed => 11))
   end
 
   def draw
-    Image["../media/assets/gosu-logo.png"].draw(0, 0, 0)
+    Gosu::Image["../assets/intro/gosu-logo.png"].draw(0, 0, 0)
     super
   end
 end
@@ -64,21 +64,21 @@ end
 #
 #  OPENING CREDITS 2 GAMESTATE
 #    Ruby logo with animated sparkle
-class OpeningCredits2 < (Gamestate rescue Gosu::Window)
-#  trait :timer
+class Opening2 <  Chingu::GameState  #(Gamestate rescue Gosu::Window)
+  trait :timer
   def setup
     self.input = { :esc => :exit, [:enter, :return] => :intro, :p => Pause, :r => lambda{current_game_state.setup} }
     Sparkle.destroy_all
-    @sparkle = Sparkle.create(:x => 373, :y => 301, :zorder => 20) # Sparkle is defined in objects.rb
+    @sparkle = Sparkle.create(:x => 553, :y => 341, :zorder => 20) # Sparkle is defined in objects.rb
     after(20) {  # make the sparkle grow and turn, then stop turning
       @sparkle.turnify1  # turnify methods are defined in Sparkle class in objects.rb
       after(100) {
         @sparkle.turnify2
-        after(400) {
+        after(100) {
           @sparkle.turnify3
           after(400) {
             @sparkle.turnify4
-            after(400) {
+            after(200) {
               @sparkle.turnify5
               after(400) {
                 @sparkle.turnify6
@@ -91,7 +91,7 @@ class OpeningCredits2 < (Gamestate rescue Gosu::Window)
   end
 
   def draw
-    Image["../media/assets/ruby-logo.png"].draw(0, 0, 0)
+    Gosu::Image["assets/intro/ruby-logo.png"].draw(0, 0, 0)
     super
   end
 end
@@ -100,8 +100,8 @@ end
 #
 #  INTRODUCTION GAMESTATE
 #
-class Introduction < (Gamestate rescue Gosu::Window)
-#  trait :timer
+class Introduction <  Chingu::GameState
+  trait :timer
   def initialize
     super
     self.input = { [:enter, :return] => :next, :p => Pause, :r => lambda{current_game_state.setup} }
@@ -112,17 +112,17 @@ class Introduction < (Gamestate rescue Gosu::Window)
     Player.destroy_all
     EndPlayer.destroy_all
     Meteor.destroy_all
-    $window.caption = "ChinguRoids"
+#    $window.caption = "          ______ Relax ______"
     @counter = 0  # used for automated Meteor creation
     @count = 1    # used for automated Meteor creation
     @nxt = false  # used for :next method ('enter')
     @song_fade = false
     @fade_count = 0
     @knight = Knight.create(:x=>900,:y=>300,:zorder=>100) # creates Knight offscreen; Knight is defined in characters.rb
-    @click = Sound["media/audio/pickup_chime.ogg"]
+    @click = Gosu::Sound["assets/audio/pickup_chime.ogg"]
 
     if $intro == false
-      $music = Song["media/audio/music/intro_song.ogg"]
+      $music = Gosu::Song["assets/audio/music/intro_song.ogg"]
       $music.volume = 0.8
       $music.play(true)
     else
@@ -130,13 +130,13 @@ class Introduction < (Gamestate rescue Gosu::Window)
     end
 
     after(300) {
-      @text = Chingu::Text.create("Welcome to ChinguRoids", :y => 60, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Zorder::GUI)
-      @text.x = 800/2 - @text.width/2 # center text
+      @text = Chingu::Text.create("Relax", :y => 150, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Zorder::GUI)
+      @text.x = 1100/2 - @text.width/2 # center text
       after(300) {
-        @text2 = Chingu::Text.create("Press ENTER to play", :y => 510, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Zorder::GUI)
-        @text2.x =800/2 - @text2.width/2 # center text
+        @text2 = Chingu::Text.create("Press ENTER to play.", :y => 510, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Zorder::GUI)
+        @text2.x = 1100/2 - @text2.width/2 # center text
         after(300) {
-          @player = EndPlayer.create(:x => 400, :y => 450, :zorder => Zorder::Main_Character)
+          @player = Knight.create(:x => 400, :y => 450, :zorder => Zorder::Main_Character)
         }
       }
     }
@@ -145,7 +145,7 @@ class Introduction < (Gamestate rescue Gosu::Window)
   def next
     if @nxt == true  # if you've already pressed 'enter' once, pressing it again skips ahead
       @nxt = false
-      push_game_state(Level_1)
+      push_game_state(LivingRoom)
     else
       @nxt = true    # transition to Level 1 - Knight enters and speaks; push Level_1 gamestate
       @click.play
@@ -159,14 +159,14 @@ class Introduction < (Gamestate rescue Gosu::Window)
             after (1400) {
               @knight.speak
                 after(10) {
-                @text3 = Chingu::Text.create("Hello", :y => 220, :font => "GeosansLight", :size => 35, :color => Colors::White, :zorder => 300)
-                @text3.x = 400 - @text3.width/2   # center text
+                @text3 = Chingu::Text.create("Relax.", :y => 220, :font => "GeosansLight", :size => 35, :color => Colors::White, :zorder => 300)
+                @text3.x = 1100/2 - @text3.width/2   # center text
                 after (880) {
-                  @text4 = Chingu::Text.create("Use the arrows to move", :y => 350, :font => "GeosansLight", :size => 35, :color => Colors::White, :zorder => 300)
-                  @text4.x = 400 - @text4.width/2
+                  @text4 = Chingu::Text.create("You've earned it.", :y => 350, :font => "GeosansLight", :size => 35, :color => Colors::White, :zorder => 300)
+                  @text4.x = 1100/2 - @text4.width/2
                   after (1390) {
-                    @text5 = Chingu::Text.create("and the spacebar to shoot.", :y => 390, :font => "GeosansLight", :size => 35, :color => Colors::White, :zorder => 300)
-                    @text5.x = 400 - @text5.width/2
+                    @text5 = Chingu::Text.create("And take care of the kids.", :y => 390, :font => "GeosansLight", :size => 35, :color => Colors::White, :zorder => 300)
+                    @text5.x = 1100/2 - @text5.width/2
                     after(1400) {
                       @knight.enter_ship
                       after(10) {
@@ -176,7 +176,7 @@ class Introduction < (Gamestate rescue Gosu::Window)
                         after(1600) {@text5.destroy}
                         after(2300) {
                           $music.stop
-                          push_game_state(Level_1)
+                          push_game_state(LivingRoom)
       } } } } } } } } } }
     end
   end
@@ -218,7 +218,7 @@ def update
   end
 
   def draw
-    Image["../media/assets/background.png"].draw(0, 0, 0)    # Background Image: Raw Gosu Image.draw(x,y,zorder)-call
+    Gosu::Image["assets/intro/background.png"].draw(0, 0, 0)    # Background Image: Raw Gosu Image.draw(x,y,zorder)-call
     super
   end
 end

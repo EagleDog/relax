@@ -64,6 +64,13 @@ class Unit < Player
     end
   end
 
+  def new_spot
+    if check_collisions(@x, @y) == true
+      @x = rand(1000) + 50
+      @y = rand(600) + 50
+    end
+  end
+
   def move
     ai
     go_left if @left == true
@@ -73,6 +80,7 @@ class Unit < Player
     @x += @vel_x
     @y += @vel_y
     walls
+    object_collision
     
     @vel_x *= 0.85
     @vel_y *= 0.85

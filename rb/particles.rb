@@ -30,6 +30,6 @@ class Particle
   end
 
   def draw
-    @image.draw(@x, @y, 5, 2, 2, @color, :add) #, @color, :add)
+    @image.draw(@x, @y, 5, 2, 2, @color) #, @color, :add)
   end
 end
