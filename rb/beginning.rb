@@ -56,7 +56,7 @@ class Opening1 <  Chingu::GameState
   end
 
   def draw
-    Gosu::Image["../assets/intro/gosu-logo.png"].draw(0, 0, 0)
+    Gosu::Image["assets/intro/gosu-logo.png"].draw(0, 0, 0)
     super
   end
 end
