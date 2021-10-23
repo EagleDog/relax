@@ -3,13 +3,17 @@
 
 class Unit < Player
   attr_reader :score
-  
-  def initialize
+#  traits :collision_detection, :bounding_box
+  # trait :bounding_circle, :collision_detection #, :debug => true
+  # traits :velocity, :collision_detection
+
+  def setup
     char_num = 1 + rand(14)
     @char = Gosu::Image.new("assets/characters/char" + char_num.to_s + ".png")
     @boom = Gosu::Sample.new("assets/audio/explosion.ogg")
     @x = rand(1000) + 50
     @y = rand(600) + 50
+    @z = @y
     @vel_x = @vel_y = @angle = 0.0
     @score = 0
     @direction = 1
@@ -26,7 +30,7 @@ class Unit < Player
 
   def ai
     count_steps
-    if @walking == true then return end
+    return if @walking == true
     if rand(@rate) == 2
       @walking = true
       case rand(8) + 1
@@ -60,14 +64,14 @@ class Unit < Player
       @right = false
       @up = false
       @down = false
-      @max_steps = rand(15) + 3
+      @max_steps = rand(10) + 1
     end
   end
 
   def new_spot
     if check_collisions(@x, @y) == true
-      @x = rand(1000) + 50
-      @y = rand(600) + 50
+      @x = 600 - rand(50)
+      @y = 200 - rand(50)
     end
   end
 
@@ -85,10 +89,9 @@ class Unit < Player
     @vel_x *= 0.85
     @vel_y *= 0.85
   end
-  
-  
+
   def draw
-    @char.draw_rot(@x, @y, Z::UNIT, 0, 0.5, 0.5, @direction * 0.75, 0.75)
+    @char.draw_rot(@x, @y, @y - 5, 0, 0.5, 0.5, @direction * 0.75, 0.75)
   end
 
 end

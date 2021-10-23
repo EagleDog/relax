@@ -1,8 +1,10 @@
 # Encoding: UTF-8
 
 
-class Particle
+class Particle < Chingu::GameObject
   attr_reader :x, :y
+  trait :bounding_circle, :debug => true
+  traits :velocity, :collision_detection
   
   def initialize(x, y)
     part_num = rand(30) + 1

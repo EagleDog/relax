@@ -130,13 +130,13 @@ class Introduction <  Chingu::GameState
     end
 
     after(300) {
-      @text = Chingu::Text.create("Relax", :y => 150, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Zorder::GUI)
+      @text = Chingu::Text.create("Relax", :y => 150, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Z::GUI)
       @text.x = 1100/2 - @text.width/2 # center text
       after(300) {
-        @text2 = Chingu::Text.create("Press ENTER to play.", :y => 510, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Zorder::GUI)
+        @text2 = Chingu::Text.create("Press ENTER to play.", :y => 510, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Z::GUI)
         @text2.x = 1100/2 - @text2.width/2 # center text
         after(300) {
-          @player = Knight.create(:x => 400, :y => 450, :zorder => Zorder::Main_Character)
+          @player = Knight.create(:x => 400, :y => 450, :zorder => Z::Main_Character)
         }
       }
     }
@@ -198,19 +198,19 @@ def update
       when 1
         Meteor.create(x: rand(800)+1, y: 0,
                 velocity_y: rand(5)+1, velocity_x: rand(-5..5),
-                :scale => rand(0.5)+0.4, :zorder => Zorder::Object)
+                :scale => rand(0.5)+0.4, :zorder => Z::Object)
       when 2
         Meteor.create(x: rand(800)+1, y: 600,
                 velocity_y: rand(1..5)*-1, velocity_x: rand(-5..5),
-                  :scale => rand(0.5)+0.4, :zorder => Zorder::Object)
+                  :scale => rand(0.5)+0.4, :zorder => Z::Object)
       when 3
         Meteor.create(x: 0, y: rand(600)+1,
                 velocity_x: rand(1..5), velocity_y: rand(-5..5),
-                  :scale => rand(0.5)+0.4, :zorder => Zorder::Object)
+                  :scale => rand(0.5)+0.4, :zorder => Z::Object)
       when 4
         Meteor.create(x: 800, y: rand(600)+1,
                 velocity_x: rand(1..5)*-1, velocity_y: rand(-5..5),
-                :scale => rand(0.5)+0.4, :zorder => Zorder::Object)
+                :scale => rand(0.5)+0.4, :zorder => Z::Object)
       end
       @counter = 60  # resets @counter to 60
     end
