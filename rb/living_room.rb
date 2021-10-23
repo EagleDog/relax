@@ -86,7 +86,7 @@ class LivingRoom < Chingu::GameState
 #    keypress
     @player.move
 #    @player.update
-    @player.collect_stars(@stars, @particles)
+#    @player.collect_stars(@stars, @particles)
 
     @units.each { |unit| unit.get_coordinates
                          unit.move }

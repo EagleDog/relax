@@ -82,11 +82,6 @@ class Player < Chingu::GameObject
   end
 
 
-
-  def update
-    self.zorder = @y
-  end
-
   def move
     @x += @vel_x
     collision_x
