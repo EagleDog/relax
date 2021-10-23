@@ -2,7 +2,8 @@
 
 
 class Unit < Player
-  attr_reader :score
+  attr_reader :x, :y, :vel_x, :vel_y
+  trait :timer
 #  traits :collision_detection, :bounding_box
   # trait :bounding_circle, :collision_detection #, :debug => true
   # traits :velocity, :collision_detection
@@ -11,6 +12,12 @@ class Unit < Player
     char_num = 1 + rand(14)
     @char = Gosu::Image.new("assets/characters/char" + char_num.to_s + ".png")
     @boom = Gosu::Sample.new("assets/audio/explosion.ogg")
+    @dust0 = Gosu::Image.new("assets/dust/dust0.png")
+    @dust1 = Gosu::Image.new("assets/dust/dust1.png")
+    @dust2 = Gosu::Image.new("assets/dust/dust2.png")
+    @dust3 = Gosu::Image.new("assets/dust/dust3.png")
+    @dust = false
+    @dust_img = @dust3
     @x = rand(1000) + 50
     @y = rand(600) + 50
     @z = @y
@@ -75,16 +82,51 @@ class Unit < Player
     end
   end
 
+  def bump_others(units, particles) #, player)
+    units.each do |unit| #, player|
+      how_far1 = Gosu.distance(@x, @y, unit.x, unit.y)
+#      how_far2 = Gosu.distance(@x, @y, player.x, player.y)
+      if how_far1 < 35 && how_far1 > 10 # || how_far2 < 35
+#        puts "bounce"
+#        @boom.play if rand(30) == 1
+        @dust = true
+        remove_dust
+#        @dust_img = @dust3
+
+#        1.times {particles.push(Particle.new(@x, @y))}
+        @x = @prev_x
+        @y = @prev_y
+        @vel_x = -@vel_x * 1.2
+        @x += 5 if rand(4) == 1
+        @x -= 5 if rand(4) == 1
+        collision_x
+        @vel_y = -@vel_y * 1.2
+        @y += 3 if rand(4) == 1
+        @y -= 3 if rand(4) == 1
+        collision_y
+      # else
+      #   @dust_img = @dust0
+      end
+    end
+  end
+
+  def remove_dust
+    after(200) { @dust = false }
+  end
+
+
   def move
     ai
     go_left if @left == true
     go_right if @right == true
+    @x += @vel_x
+    collision_x
     go_up if @up == true
     go_down if @down == true
-    @x += @vel_x
     @y += @vel_y
+    collision_y
     walls
-    object_collision
+#    object_collision
     
     @vel_x *= 0.85
     @vel_y *= 0.85
@@ -92,6 +134,13 @@ class Unit < Player
 
   def draw
     @char.draw_rot(@x, @y, @y - 5, 0, 0.5, 0.5, @direction * 0.75, 0.75)
+    if @dust == true
+      @dust3.draw_rot(@x * @direction, @y - 30, @y, 0, 0.5, 0.5, @direction, 1)
+      @dust2.draw_rot(@x + 20 * @direction, @y, @y, 0, 0.5, 0.5, @direction, 1)
+#      @dust1.draw_rot(@x - 15 * @direction, @y - 10, @y, -45, 0.5, 0.5, @direction, 1)
+
+    end
+#    @dust_img = @dust0
   end
 
 end

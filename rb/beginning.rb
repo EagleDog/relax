@@ -8,7 +8,7 @@ class Beginning < Chingu::GameState #(Gamestate rescue Gosu::Window) # < Chingu:
    $music = Gosu::Song["assets/audio/intro_song.ogg"]
    $music.volume = 0.9
    $music.play(true)
-   after(5) { push_game_state(Chingu::GameStates::FadeTo.new(Opening1.new, :speed => 8)) }
+   after(5) { push_game_state(Chingu::GameStates::FadeTo.new(LivingRoom.new, :speed => 8)) }  #(Opening1.new, :speed => 8)) }
   end
 end
 

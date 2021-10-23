@@ -103,6 +103,25 @@ class Player < Chingu::GameObject
   end
   
 
+  def grab_toy
+    
+  end
+
+
+  def collect_toys(particles)
+    particles.each do |particle|
+      if !particle.held
+        if Gosu.distance(@x, @y, particle.x, particle.y) < 35
+          @boom.play # if rand(4) == 1
+          particle.held = true
+        end
+      end
+    end
+  end
+
+
+
+
   def collect_stars(stars, particles)
     stars.reject! do |star|
       if Gosu.distance(@x, @y, star.x, star.y) < 35

@@ -2,36 +2,82 @@
 
 
 class Particle < Chingu::GameObject
-  attr_reader :x, :y
-  trait :bounding_circle, :debug => true
-  traits :velocity, :collision_detection
+  attr_reader :x, :y, :held
+  trait :timer
+#  trait :bounding_circle, :debug # => true
+#  traits :velocity, :collision_detection
   
-  def initialize(x, y)
+  def setup #initialize(x, y)
     part_num = rand(30) + 1
     particle = "obj" + part_num.to_s
     @image = Gosu::Image.new("assets/particles/" + particle + ".png")
     @color = Gosu::Color::BLACK.dup
-    @color.red = rand(256 - 100) + 40
-    @color.green = rand(256 - 100) + 40
-    @color.blue = rand(256 - 100) + 40
+    @color.red = rand(256 - 100) + 80
+    @color.green = rand(256 - 100) + 80
+    @color.blue = rand(256 - 100) + 80
     @color.alpha = 255
     @x = x
     @y = y
-    @vel_y = rand(10) -15 # Vertical velocity
+    @vel_y = rand(10) - 20 # Vertical velocity
     @vel_x = rand(20) - 10
+    @prev_x = 0
+    @prev_y = 0
+    @air = 300
+    @ground = rand(200) + 200
+    @held = false
+    @moving = true
+    stop_moving
+  end
+
+  # def setup
+  #   after(400) {stop_moving}
+  # end
+
+
+
+  def get_coordinates
+    @prev_x = @x
+    @prev_y = @y
+  end
+
+  def collision_x
+    @x = @prev_x if check_collisions(@x, @y) == true
+  end
+
+  def collision_y
+    @y = @prev_y if check_collisions(@x, @y) == true
+  end
+
+  def walls
+    if @x > 1050 then @x = 1050; @vel_x = -@vel_x end
+    if @x < 50 then @x = 50; @vel_x = -@vel_x end
+    if @y > 610 then @y = 610; @vel_y = -@vel_y end
+    if @y < 70 then @y = 70; @vel_y = -@vel_y end
+  end
+
+  def stop_moving
+    air_time = rand(900) + 300
+    after(air_time) { @moving = false }
   end
 
   def movement
-    @vel_y += 0.5
-    @y = @y + @vel_y
+    if @moving == true
+      @vel_y += 0.5
+      @y = @y + @vel_y
+      collision_y
 
-    @x += @vel_x
+      @x += @vel_x
+      collision_x
+      walls
+#      stop_moving if @y > @ground && @y < @air
+    end
+  end
 
-
-    # after(1550) {self.destroy}
+  def update
+    
   end
 
   def draw
-    @image.draw(@x, @y, 5, 2, 2, @color) #, @color, :add)
+    @image.draw(@x, @y, @y + 10, 1.0, 1.0, @color)
   end
 end
