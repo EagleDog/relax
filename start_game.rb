@@ -36,6 +36,7 @@ end
 module Colors   # colors
   Dark_Orange = Gosu::Color.new(0xFFCC3300)
   White = Gosu::Color.new(0xFFFFFFFF)
+  Black = Gosu::Color::BLACK
   Blue_Laser = Gosu::Color.new(0xFF86EFFF)
 end
 

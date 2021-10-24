@@ -5,10 +5,25 @@
 
 class Level1 < LivingRoom
   def initialize
-    @num_toys = 4
-    @num_kids = 3
-    $window.caption = "          ______ Level 1 ______"
+    @num_toys = 6
+    @num_kids = 2
+    $window.caption = "                  ______ Level 1 ______"
+
     super
+  end
+
+  def setup
+    super
+    Chingu::Text.destroy_all
+    after(300) {
+      @text1 = Chingu::Text.create("Put the stuff in the bin.", :y => 400, :font => "GeosansLight", :size => 45, :color => Colors::White, :zorder => 2000)
+      @text1.x = 1100/2 - @text1.width/2 # center text
+      @text2 = Chingu::Text.create("Put the stuff in the bin.", :y => 400 + 4, :font => "GeosansLight", :size => 45, :color => Gosu::Color::BLACK, :zorder => 1000)
+      @text2.x = 1100/2 - @text2.width/2 + 4# center text
+      after(3000) {
+        Chingu::Text.destroy_all
+      }
+    }
   end
 
   def next

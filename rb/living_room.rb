@@ -14,7 +14,7 @@ class LivingRoom < Chingu::GameState
     self.input = { :p => Pause, :r => lambda{ current_game_state.setup },
                    :n => :next }
 
-    @img_back = Gosu::Image.new("assets/world.png")
+    @img_back = Gosu::Image.new("assets/living_room.png")
 
     @particles = []
     @num_toys.times do
@@ -34,7 +34,8 @@ class LivingRoom < Chingu::GameState
     @units.each { |unit| unit.new_spot }
 
 #   @human.input = { :holding_space => make_particles }
-    @font = Gosu::Font.new(20)
+    @font1 = Gosu::Font.new(20)
+    @font2 = Gosu::Font.new(20)
 
   end
 
@@ -70,8 +71,6 @@ class LivingRoom < Chingu::GameState
 
     @human.get_coordinates
     @human.move
-#    @human.update
-#    @human.collect_stars(@stars, @particles)
 
     @human.collect_toys(@particles)
 
@@ -81,7 +80,7 @@ class LivingRoom < Chingu::GameState
       if @bumping == true
         unit.bump_others(@units, @particles) #, @human) }
       end
-      unit.grab_toy(@particles, index)
+      unit.grab_toy(@particles, index) if rand(6) == 1
     end
 
     @toy_chest.update_toys(@units, @particles)
@@ -90,10 +89,12 @@ class LivingRoom < Chingu::GameState
       particle.get_coordinates
       particle.movement
       if particle.held == -1
+        particle.moving = false
         particle.x = @human.x
         particle.y = @human.y
         particle.direction = @human.direction
       elsif particle.held >= 0
+        particle.moving = false
         unit = @units[particle.held]
         particle.x = unit.x
         particle.y = unit.y
@@ -113,32 +114,8 @@ class LivingRoom < Chingu::GameState
     @human.draw
     @units.each { |unit| unit.draw }
     @particles.each { |particle| particle.draw }
-    @font.draw_text("Stuff: #{@particles.length}    Put all the stuff in the toy chest.", 10, 10, Z::UI, 1.0, 1.0, Gosu::Color::YELLOW)
+    @font1.draw_text("Stuff: #{@particles.length}", 12, 12, Z::UI, 1.0, 1.0, Gosu::Color::YELLOW)
+    @font1.draw_text("Stuff: #{@particles.length}", 14, 14, Z::UI - 1, 1.0, 1.0, Gosu::Color::BLACK)
   end
 end
-
-  # def collision_check
-  #   Player.each_collision(Unit) do |player, unit|    # Collide player with stars
-  #     player.bounce
-  #     unit.bounce
-  #     screen_shake      # do screen_shake method (see below)
-  #   end
-  # end
-
-  # def screen_shake
-  #   if @shaking == false   # if screen shake is cooled down
-  #     game_objects.each do |object|  # move each object right, down, left, up, right, down, left, up
-  #       object.x += 10
-  #       after(30) {object.y += 10}   # 30 ms tick time delay between each movement
-  #       after(60) {object.x -= 10}
-  #       after(90) {object.y -= 10}
-  #       after(120) {object.x += 10}
-  #       after(150) {object.y += 10}
-  #       after(180) {object.x -= 10}
-  #       after(210) {object.y -= 10}
-  #     end
-  #     @shaking = true  # screen_shake won't occur again until this becomes false
-  #     after(1000) {@shaking = false}  # after 1000 ms, screen can shake again
-  #   end
-  # end
 

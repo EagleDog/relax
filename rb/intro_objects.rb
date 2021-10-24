@@ -1,32 +1,8 @@
 
-class EndPlayer < Chingu::GameObject
-end
-
-# #
-# #   METEOR
-# #     Meteor class is used in Introduction gamestate
-# class Meteor < Chingu::GameObject
-# #  trait :bounding_circle, :debug => DEBUG
-# #  traits :velocity, :collision_detection
-
-#   def initialize(options)
-#     super(options.merge(:image => Gosu::Image["assets/intro/meteor.png"]))
-#     @angular_velocity = 5
-#     @random = rand(2)+1
-#     if(@random == 1)
-#       @angular_velocity = -@angular_velocity
-#     end
-#   end
-
-#   def update
-#     @angle += @angular_velocity
-#   end
-# end
-
 
 #
 #  KNIGHT
-#    called in beginning.rb, in Introduction gamestate
+#
 class Knight < Chingu::GameObject
   def initialize(options)
     super

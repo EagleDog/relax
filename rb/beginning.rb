@@ -20,7 +20,7 @@ class Pause <  Chingu::GameState
     super
     @title = Chingu::Text.create(:text=>"PAUSED (press 'P' to un-pause)", :y=>110, :size=>30, :color => Colors::Dark_Orange, :zorder=>1000 )
     @title.x = 400 - @title.width/2
-    self.input = { :p => :un_pause, :r => :reset }
+    self.input = { :p => :un_pause, :r => :reset, :n => :next }
     $music.pause
   end
   def un_pause
@@ -29,6 +29,9 @@ class Pause <  Chingu::GameState
   end
   def reset  # pressing 'r' resets the gamestate
     pop_game_state(:setup => true)
+  end
+  def next
+    push_game_state(Introduction)
   end
   def draw
     previous_game_state.draw    # Draw prev game state onto screen (in this case our level)
@@ -42,7 +45,7 @@ end
 class Opening1 <  Chingu::GameState
   trait :timer
   def setup
-    self.input = { :esc => :exit, [:enter, :return] => :intro, :p => Pause, :r => lambda{current_game_state.setup} }
+    self.input = { :esc => :exit, [:enter, :return] => :intro, :p => Pause, :r => lambda{current_game_state.setup}, :n => :next }
     @beam = Highlight.create(:x => 116, :y => 360)  # from intro_objects.rb
     @beam2 = Highlight2.create(:x => 50, :y => 360)
     @beam3 = Highlight.create(:x => -400, :y => 360)
@@ -53,6 +56,10 @@ class Opening1 <  Chingu::GameState
 
   def intro # pressing 'enter' skips ahead to the Introduction
     push_game_state(Chingu::GameStates::FadeTo.new(Opening2.new, :speed => 11)) #Introduction.new, :speed => 11))
+  end
+
+  def next
+    push_game_state(Level1)
   end
 
   def draw
@@ -67,7 +74,7 @@ end
 class Opening2 <  Chingu::GameState  #(Gamestate rescue Gosu::Window)
   trait :timer
   def setup
-    self.input = { :esc => :exit, [:enter, :return] => :intro, :p => Pause, :r => lambda{current_game_state.setup} }
+    self.input = { :esc => :exit, [:enter, :return] => :intro, :p => Pause, :r => lambda{current_game_state.setup}, :n => :next }
     Sparkle.destroy_all
     @sparkle = Sparkle.create(:x => 553, :y => 341, :zorder => 20) # Sparkle is defined in objects.rb
     after(20) {  # make the sparkle grow and turn, then stop turning
@@ -90,6 +97,10 @@ class Opening2 <  Chingu::GameState  #(Gamestate rescue Gosu::Window)
     push_game_state(Chingu::GameStates::FadeTo.new(Introduction.new, :speed => 11))
   end
 
+  def next
+    push_game_state(Introduction)
+  end
+
   def draw
     Gosu::Image["assets/intro/ruby-logo.png"].draw(0, 0, 0)
     super
@@ -104,7 +115,7 @@ class Introduction <  Chingu::GameState
   trait :timer
   def initialize
     super
-    self.input = { [:enter, :return] => :next, :p => Pause, :r => lambda{current_game_state.setup} }
+    self.input = { [:enter, :return] => :proceed, :p => Pause, :r => lambda{current_game_state.setup}, :n => :next }
   end
 
   def setup
@@ -114,7 +125,7 @@ class Introduction <  Chingu::GameState
 #    $window.caption = "          ______ Relax ______"
     @counter = 0  # used for automated Meteor creation
     @count = 1    # used for automated Meteor creation
-    @nxt = false  # used for :next method ('enter')
+    @nxt = false  # used for :proceed method ('enter')
     @song_fade = false
     @fade_count = 0
     @knight = Knight.create(:x=>1150,:y=>300,:zorder=>100) # creates Knight offscreen; Knight is defined in characters.rb
@@ -142,6 +153,10 @@ class Introduction <  Chingu::GameState
   end
 
   def next
+    push_game_state(Level1)
+  end
+
+  def proceed
     if @nxt == true  # if you've already pressed 'enter' once, pressing it again skips ahead
       @nxt = false
       push_game_state(Level1)
@@ -191,31 +206,6 @@ def update
       end
     end
   end
-
-  #   if(@counter >= 80)  # automated Meteor creation when @counter is 80
-  #     @random = rand(4)+1
-  #     case @random
-  #     when 1
-  #       Meteor.create(x: rand(800)+1, y: 0,
-  #               velocity_y: rand(5)+1, velocity_x: rand(-5..5),
-  #               :scale => rand(0.5)+0.4, :zorder => Z::Object)
-  #     when 2
-  #       Meteor.create(x: rand(800)+1, y: 600,
-  #               velocity_y: rand(1..5)*-1, velocity_x: rand(-5..5),
-  #                 :scale => rand(0.5)+0.4, :zorder => Z::Object)
-  #     when 3
-  #       Meteor.create(x: 0, y: rand(600)+1,
-  #               velocity_x: rand(1..5), velocity_y: rand(-5..5),
-  #                 :scale => rand(0.5)+0.4, :zorder => Z::Object)
-  #     when 4
-  #       Meteor.create(x: 800, y: rand(600)+1,
-  #               velocity_x: rand(1..5)*-1, velocity_y: rand(-5..5),
-  #               :scale => rand(0.5)+0.4, :zorder => Z::Object)
-  #     end
-  #     @counter = 60  # resets @counter to 60
-  #   end
-  #   Meteor.destroy_if {|meteor| meteor.outside_window?} # self-explanatory
-  # end
 
   def draw
     Gosu::Image["assets/intro/background.png"].draw(0, 0, 0)    # Background Image: Raw Gosu Image.draw(x,y,zorder)-call

@@ -6,8 +6,8 @@
 class Level2 < LivingRoom
   def initialize
     @num_toys = 10
-    @num_kids = 6
-    $window.caption = "          ______ Level 2 ______"
+    @num_kids = 4
+    $window.caption = "                  ______ Level 2 ______"
     super
   end
 

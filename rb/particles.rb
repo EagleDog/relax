@@ -13,9 +13,9 @@ class Particle < Chingu::GameObject
     particle = "obj" + part_num.to_s
     @image = Gosu::Image.new("assets/particles/" + particle + ".png")
     @color = Gosu::Color::BLACK.dup
-    @color.red = rand(256 - 100) + 80
-    @color.green = rand(256 - 100) + 80
-    @color.blue = rand(256 - 100) + 80
+    @color.red = rand(256 - 150) + 120
+    @color.green = rand(256 - 150) + 120
+    @color.blue = rand(256 - 150) + 120
     @color.alpha = 255
     @x = x
     @y = y
@@ -23,13 +23,17 @@ class Particle < Chingu::GameObject
     @vel_x = 0
     @prev_x = x
     @prev_y = y
-#    @air = 300
-#    @ground = rand(200) + 200
+
+    @spin = rand(6) - 10
+    @rotation = 0
+    @rot = 0
 
     @held = -2
     @direction = 1.0
     @offset_x = rand(11) / 10
     @offset_y = rand(11) / 10
+    @off_x = @offset_x
+    @off_y = @offset_y
 
     # # Code for initial movement:
     # @vel_y = rand(10) - 20 # Vertical velocity
@@ -78,6 +82,11 @@ class Particle < Chingu::GameObject
 
   def movement
     if @moving == true
+      @rotation += @spin
+      @rot = @rotation
+      @off_x = 0.5
+      @off_y = 0.5
+
       @vel_y += 0.5
       @y = @y + @vel_y
       collision_y
@@ -85,15 +94,17 @@ class Particle < Chingu::GameObject
       @x += @vel_x
       collision_x
       walls
-#      stop_moving if @y > @ground && @y < @air
+    else
+      @rot = 0
+      @off_x = @offset_x
+      @off_y = @offset_y
     end
   end
 
   def update
-
   end
 
   def draw
-    @image.draw_rot(@x, @y, @y + 10, 0, @offset_x, @offset_y, @direction, 1.0, @color)
+    @image.draw_rot(@x, @y, @y + 10, @rot, @off_x, @off_y, @direction, 1.0, @color)
   end
 end

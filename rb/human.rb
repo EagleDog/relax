@@ -29,7 +29,7 @@ class Human < Player
   def collect_toys(particles)
     particles.each do |particle|
       if particle.held < -1
-        if Gosu.distance(@x, @y, particle.x, particle.y) < 45
+        if Gosu.distance(@x, @y, particle.x, particle.y) < 50
 #          @boom.play # if rand(4) == 1
           particle.held = -1
         end
@@ -41,8 +41,8 @@ class Human < Player
     @particles.each do |particle|
       if particle.held == -1
         particle.held = -2
-        particle.x += 50 * @direction
-        particle.y += 50
+        particle.x += 40 * @direction
+        particle.y -= 40
       end
     end
   end

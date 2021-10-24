@@ -82,7 +82,7 @@ class Unit < Player
       @y = 200 - rand(50)
     end
   end
-  
+
   def remove_dust
     after(200) { @dust = false }
   end
@@ -91,6 +91,7 @@ class Unit < Player
     units.each do |unit| #, player|
       how_far = Gosu.distance(@x, @y, unit.x, unit.y)
       if how_far < 35 && how_far > 10 # || how_far2 < 35
+        @boom.play if rand(50) == 1
         @dust = true
         remove_dust
 
@@ -173,7 +174,6 @@ class Unit < Player
       return if @has_toy != nil
       if particle.held < 0
         if Gosu.distance(@x, @y, particle.x, particle.y) < 35
-          # @boom.play # if rand(4) == 1
           particle.held = index
           @has_toy = particle
         end
