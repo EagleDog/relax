@@ -5,16 +5,21 @@
 
 class Level3 < LivingRoom
   def initialize
-    @num_toys = 35
-    @num_kids = 14
+    @num_toys = 20
+    @num_kids = 7
+    $window.caption = "          ______ Level 3 ______"
     super
+  end
+
+  def next
+    push_game_state(Level4)
   end
 
   def update
     super
     if @particles.length < 1
-      puts "YOU'VE WON!"
-      push_game_state(Chingu::GameStates::FadeTo.new(Level3.new, :speed => 8))
+      puts "LEVEL 3 COMPLETE."
+      push_game_state(Chingu::GameStates::FadeTo.new(Level4.new, :speed => 8))
     end
   end
 end

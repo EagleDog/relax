@@ -58,10 +58,9 @@ class Player < Chingu::GameObject
     end
   end
 
-  def bounce
-    puts "bounce"
-  end
-
+  # def bounce
+  #   puts "bounce"
+  # end
 
   def move
     @x += @vel_x

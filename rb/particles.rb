@@ -23,8 +23,8 @@ class Particle < Chingu::GameObject
     @vel_x = 0
     @prev_x = x
     @prev_y = y
-    @air = 300
-    @ground = rand(200) + 200
+#    @air = 300
+#    @ground = rand(200) + 200
 
     @held = -2
     @direction = 1.0

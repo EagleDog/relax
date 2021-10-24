@@ -30,7 +30,7 @@ class Human < Player
     particles.each do |particle|
       if particle.held < -1
         if Gosu.distance(@x, @y, particle.x, particle.y) < 45
-          @boom.play # if rand(4) == 1
+#          @boom.play # if rand(4) == 1
           particle.held = -1
         end
       end

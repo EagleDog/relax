@@ -6,9 +6,9 @@ class Beginning < Chingu::GameState
   def setup
    self.input = { :esc => :exit } #, [:enter, :return] => Opening1, :p => Pause, :r => lambda{current_game_state.setup} }
    $music = Gosu::Song["assets/audio/intro_song.ogg"]
-   $music.volume = 0.0 #0.9
+   $music.volume = 0.7 #0.9
    $music.play(true)
-   after(5) { push_game_state(Chingu::GameStates::FadeTo.new(Level1.new, :speed => 8)) }  #(Opening1.new, :speed => 8)) }
+   after(5) { push_game_state(Chingu::GameStates::FadeTo.new(Opening1.new, :speed => 8)) }  #(Opening1.new, :speed => 8)) }
   end
 end
 
@@ -111,18 +111,17 @@ class Introduction <  Chingu::GameState
     Chingu::Text.destroy_all # destroy any previously existing Text, Player, EndPlayer, and Meteors
     Player.destroy_all
     EndPlayer.destroy_all
-    Meteor.destroy_all
 #    $window.caption = "          ______ Relax ______"
     @counter = 0  # used for automated Meteor creation
     @count = 1    # used for automated Meteor creation
     @nxt = false  # used for :next method ('enter')
     @song_fade = false
     @fade_count = 0
-    @knight = Knight.create(:x=>900,:y=>300,:zorder=>100) # creates Knight offscreen; Knight is defined in characters.rb
+    @knight = Knight.create(:x=>1150,:y=>300,:zorder=>100) # creates Knight offscreen; Knight is defined in characters.rb
     @click = Gosu::Sound["assets/audio/pickup_chime.ogg"]
 
     if $intro == false
-      $music = Gosu::Song["assets/audio/music/intro_song.ogg"]
+      $music = Gosu::Song["assets/audio/intro_song.ogg"]
       $music.volume = 0.8
       $music.play(true)
     else
@@ -130,13 +129,13 @@ class Introduction <  Chingu::GameState
     end
 
     after(300) {
-      @text = Chingu::Text.create("Relax", :y => 150, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Z::GUI)
+      @text = Chingu::Text.create("Relax", :y => 150, :font => "GeosansLight", :size => 70, :color => Colors::Dark_Orange, :zorder => Z::GUI)
       @text.x = 1100/2 - @text.width/2 # center text
       after(300) {
         @text2 = Chingu::Text.create("Press ENTER to play.", :y => 510, :font => "GeosansLight", :size => 45, :color => Colors::Dark_Orange, :zorder => Z::GUI)
         @text2.x = 1100/2 - @text2.width/2 # center text
         after(300) {
-          @player = Knight.create(:x => 400, :y => 450, :zorder => Z::Main_Character)
+#          @player = Knight.create(:x => 400, :y => 450, :zorder => Z::Main_Character)
         }
       }
     }
@@ -145,7 +144,7 @@ class Introduction <  Chingu::GameState
   def next
     if @nxt == true  # if you've already pressed 'enter' once, pressing it again skips ahead
       @nxt = false
-      push_game_state(LivingRoom)
+      push_game_state(Level1)
     else
       @nxt = true    # transition to Level 1 - Knight enters and speaks; push Level_1 gamestate
       @click.play
@@ -176,7 +175,7 @@ class Introduction <  Chingu::GameState
                         after(1600) {@text5.destroy}
                         after(2300) {
                           $music.stop
-                          push_game_state(LivingRoom)
+                          push_game_state(Level1)
       } } } } } } } } } }
     end
   end
@@ -191,31 +190,32 @@ def update
         $music.volume -= 0.1
       end
     end
-
-    if(@counter >= 80)  # automated Meteor creation when @counter is 80
-      @random = rand(4)+1
-      case @random
-      when 1
-        Meteor.create(x: rand(800)+1, y: 0,
-                velocity_y: rand(5)+1, velocity_x: rand(-5..5),
-                :scale => rand(0.5)+0.4, :zorder => Z::Object)
-      when 2
-        Meteor.create(x: rand(800)+1, y: 600,
-                velocity_y: rand(1..5)*-1, velocity_x: rand(-5..5),
-                  :scale => rand(0.5)+0.4, :zorder => Z::Object)
-      when 3
-        Meteor.create(x: 0, y: rand(600)+1,
-                velocity_x: rand(1..5), velocity_y: rand(-5..5),
-                  :scale => rand(0.5)+0.4, :zorder => Z::Object)
-      when 4
-        Meteor.create(x: 800, y: rand(600)+1,
-                velocity_x: rand(1..5)*-1, velocity_y: rand(-5..5),
-                :scale => rand(0.5)+0.4, :zorder => Z::Object)
-      end
-      @counter = 60  # resets @counter to 60
-    end
-    Meteor.destroy_if {|meteor| meteor.outside_window?} # self-explanatory
   end
+
+  #   if(@counter >= 80)  # automated Meteor creation when @counter is 80
+  #     @random = rand(4)+1
+  #     case @random
+  #     when 1
+  #       Meteor.create(x: rand(800)+1, y: 0,
+  #               velocity_y: rand(5)+1, velocity_x: rand(-5..5),
+  #               :scale => rand(0.5)+0.4, :zorder => Z::Object)
+  #     when 2
+  #       Meteor.create(x: rand(800)+1, y: 600,
+  #               velocity_y: rand(1..5)*-1, velocity_x: rand(-5..5),
+  #                 :scale => rand(0.5)+0.4, :zorder => Z::Object)
+  #     when 3
+  #       Meteor.create(x: 0, y: rand(600)+1,
+  #               velocity_x: rand(1..5), velocity_y: rand(-5..5),
+  #                 :scale => rand(0.5)+0.4, :zorder => Z::Object)
+  #     when 4
+  #       Meteor.create(x: 800, y: rand(600)+1,
+  #               velocity_x: rand(1..5)*-1, velocity_y: rand(-5..5),
+  #               :scale => rand(0.5)+0.4, :zorder => Z::Object)
+  #     end
+  #     @counter = 60  # resets @counter to 60
+  #   end
+  #   Meteor.destroy_if {|meteor| meteor.outside_window?} # self-explanatory
+  # end
 
   def draw
     Gosu::Image["assets/intro/background.png"].draw(0, 0, 0)    # Background Image: Raw Gosu Image.draw(x,y,zorder)-call

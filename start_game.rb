@@ -5,8 +5,8 @@
 #                                             #
 #                                             #
 
-require_relative 'chingu/chingu'
 # require "gosu"
+require_relative 'chingu/chingu'
 require_relative "rb/intro_objects.rb"
 require_relative "rb/beginning.rb"
 require_relative "rb/living_room.rb"
@@ -19,6 +19,8 @@ require_relative "rb/particles"
 require_relative "rb/level_1"
 require_relative "rb/level_2"
 require_relative "rb/level_3"
+require_relative "rb/level_4"
+require_relative "rb/level_5"
 require_relative "rb/ending"
 
 
@@ -48,7 +50,7 @@ class Game < Chingu::Window
 #                 [:q, :l] => :pop,
 #                 :z => :log,
 #                 :r => lambda{current_game_state.setup}
-                  # :space => :begin
+                  :t => :begin,
                   :y => :ending
                }
 #    retrofy
@@ -59,7 +61,7 @@ class Game < Chingu::Window
   end
 
   def begin
-    push_game_state(LivingRoom)
+    push_game_state(Introduction)
   end
 
   def ending

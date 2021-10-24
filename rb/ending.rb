@@ -8,10 +8,10 @@ class Ending < Chingu::GameState
   def setup
     Chingu::Text.destroy_all # destroy any previously existing Text, Player, EndPlayer, and Meteors
     Player.destroy_all
-    self.input = { :esc => :exit }
+    self.input = { :esc => :exit, [:enter, :return] => :next }
 
-    $music = Gosu::Song["assets/audio/stageoids.ogg"]
-    $music.volume = 0.1
+    $music = Gosu::Song["assets/audio/intro_song.ogg"]
+    $music.volume = 0.8
     $music.play(true)
 
     after(300) {
@@ -29,7 +29,9 @@ class Ending < Chingu::GameState
   end
 
 
-
+  def next
+    push_game_state(Introduction)
+  end
 
 
 

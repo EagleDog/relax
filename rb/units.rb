@@ -60,7 +60,6 @@ class Unit < Player
       @down = true if @y < 50
       @down = false if @y > 650
       @up = true if @y > 650
-
     end
   end
 
@@ -83,19 +82,18 @@ class Unit < Player
       @y = 200 - rand(50)
     end
   end
+  
+  def remove_dust
+    after(200) { @dust = false }
+  end
 
   def bump_others(units, particles) #, player)
     units.each do |unit| #, player|
-      how_far1 = Gosu.distance(@x, @y, unit.x, unit.y)
-#      how_far2 = Gosu.distance(@x, @y, player.x, player.y)
-      if how_far1 < 35 && how_far1 > 10 # || how_far2 < 35
-#        puts "bounce"
-#        @boom.play if rand(30) == 1
+      how_far = Gosu.distance(@x, @y, unit.x, unit.y)
+      if how_far < 35 && how_far > 10 # || how_far2 < 35
         @dust = true
         remove_dust
-#        @dust_img = @dust3
 
-#        1.times {particles.push(Particle.new(@x, @y))}
         @x = @prev_x
         @y = @prev_y
         @vel_x = -@vel_x * 1.2
@@ -113,9 +111,6 @@ class Unit < Player
             throw_toy
           end
         end
-
-      # else
-      #   @dust_img = @dust0
       end
     end
   end
@@ -139,10 +134,6 @@ class Unit < Player
       @has_toy.vel_y = -rand(15)
     end
     @has_toy = nil
-  end
-
-  def remove_dust
-    after(200) { @dust = false }
   end
 
 

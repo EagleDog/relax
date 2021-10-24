@@ -2,26 +2,26 @@
 class EndPlayer < Chingu::GameObject
 end
 
-#
-#   METEOR
-#     Meteor class is used in Introduction gamestate
-class Meteor < Chingu::GameObject
-#  trait :bounding_circle, :debug => DEBUG
-#  traits :velocity, :collision_detection
+# #
+# #   METEOR
+# #     Meteor class is used in Introduction gamestate
+# class Meteor < Chingu::GameObject
+# #  trait :bounding_circle, :debug => DEBUG
+# #  traits :velocity, :collision_detection
 
-  def initialize(options)
-    super(options.merge(:image => Gosu::Image["assets/intro/meteor.png"]))
-    @angular_velocity = 5
-    @random = rand(2)+1
-    if(@random == 1)
-      @angular_velocity = -@angular_velocity
-    end
-  end
+#   def initialize(options)
+#     super(options.merge(:image => Gosu::Image["assets/intro/meteor.png"]))
+#     @angular_velocity = 5
+#     @random = rand(2)+1
+#     if(@random == 1)
+#       @angular_velocity = -@angular_velocity
+#     end
+#   end
 
-  def update
-    @angle += @angular_velocity
-  end
-end
+#   def update
+#     @angle += @angular_velocity
+#   end
+# end
 
 
 #
@@ -37,7 +37,7 @@ class Knight < Chingu::GameObject
     @factoring = 1 # used for shrinking Knight when he enters the ship
   end
   def movement   # called in Introduction gamestate
-    @velox = -7  # move left
+    @velox = -9  # move left
   end
   def enter_ship # called in Introduction gamestate
     @veloy = 2
@@ -50,8 +50,8 @@ class Knight < Chingu::GameObject
     self.factor *= @factoring
     @x += @velox
     @y += @veloy
-    if @x <= 400; @velox = 0; end
-    if @y >= 450; @veloy = 0; end
+    if @x <= 550; @velox = 0; end
+    if @y >= 650; @veloy = 0; end
   end
 end
 
