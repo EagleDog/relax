@@ -19,10 +19,10 @@ class Particle < Chingu::GameObject
     @color.alpha = 255
     @x = x
     @y = y
-    @vel_y = rand(10) - 20 # Vertical velocity
-    @vel_x = rand(20) - 10
-    @prev_x = 0
-    @prev_y = 0
+    @vel_y = 0
+    @vel_x = 0
+    @prev_x = x
+    @prev_y = y
     @air = 300
     @ground = rand(200) + 200
 
@@ -31,19 +31,29 @@ class Particle < Chingu::GameObject
     @offset_x = rand(11) / 10
     @offset_y = rand(11) / 10
 
-    @moving = true
-    stop_moving
+    # # Code for initial movement:
+    # @vel_y = rand(10) - 20 # Vertical velocity
+    # @vel_x = rand(20) - 10
+    # @moving = true
+    # stop_moving
   end
 
   # def setup
   #   after(400) {stop_moving}
   # end
 
-
-
   def get_coordinates
     @prev_x = @x
     @prev_y = @y
+  end
+
+  def has_collisions
+    return true if check_collisions(@x, @y) == true
+    return true if @x > 1040
+    return true if @x < 50
+    return true if @y > 610
+    return true if @y < 70
+    return false
   end
 
   def collision_x

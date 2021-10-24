@@ -10,6 +10,11 @@ class ToyChest < Chingu::GameObject
     @full_chest = true
     @x = 600
     @y = 530
+    @particles = nil
+  end
+
+  def assign_particles(particles)
+    @particles = particles
   end
 
   def empty
@@ -26,20 +31,20 @@ class ToyChest < Chingu::GameObject
     #play sounds
   end
 
-  def toy_shower(particles)
-    during(150) {
-      if rand(3) == 1 
-        1.times {particles.push(Particle.create(:x => @x + 100, :y => @y + 50))}
-      end
-    }
-    after(200) { empty }
-    after(5000) { full }
-  end
+#   def toy_shower(particles)
+#     during(150) {
+#       if rand(3) == 1 
+#         1.times {particles.push(Particle.create(:x => @x + 100, :y => @y + 50))}
+#       end
+#     }
+#     after(200) { empty }
+#     after(5000) { full }
+#   end
 
   def collide_kids(units, particles)
     units.each do |unit|
       if Gosu.distance(@x + 100, @y + 50, unit.x, unit.y) < 40
-        toy_shower(particles) if @full_chest == true
+        # toy_shower(particles) if @full_chest == true
         play_time
       end
     end
