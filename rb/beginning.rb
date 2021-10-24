@@ -8,7 +8,7 @@ class Beginning < Chingu::GameState #(Gamestate rescue Gosu::Window) # < Chingu:
    $music = Gosu::Song["assets/audio/intro_song.ogg"]
    $music.volume = 0.0 #0.9
    $music.play(true)
-   after(5) { push_game_state(Chingu::GameStates::FadeTo.new(LivingRoom.new, :speed => 8)) }  #(Opening1.new, :speed => 8)) }
+   after(5) { push_game_state(Chingu::GameStates::FadeTo.new(Level1.new, :speed => 8)) }  #(Opening1.new, :speed => 8)) }
   end
 end
 
@@ -26,7 +26,7 @@ class Pause <  Chingu::GameState #(Gamestate rescue Gosu::Window)
   def un_pause
     $music.play
     pop_game_state(:setup => false)    # Return the previous game state, dont call setup()
-  end  
+  end
   def reset  # pressing 'r' resets the gamestate
     pop_game_state(:setup => true)
   end
@@ -38,7 +38,7 @@ end
 
 #
 #  OPENING CREDITS GAMESTATE
-#    Gosu logo with animated highlights 
+#    Gosu logo with animated highlights
 class Opening1 <  Chingu::GameState
   trait :timer
   def setup
@@ -141,7 +141,7 @@ class Introduction <  Chingu::GameState
       }
     }
   end
-  
+
   def next
     if @nxt == true  # if you've already pressed 'enter' once, pressing it again skips ahead
       @nxt = false

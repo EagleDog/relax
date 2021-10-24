@@ -15,8 +15,6 @@ class LivingRoom < Chingu::GameState
 
     self.input = { :p => Pause, :r => lambda{ current_game_state.setup } }
 
-    @num_toys = 15
-    @num_kids = 4
 
     @img_back = Gosu::Image.new("assets/world.png")
 
@@ -30,7 +28,6 @@ class LivingRoom < Chingu::GameState
       @particles.push(pp)
     end
     @toy_chest = ToyChest.create(:x => 600, :y => 530, :zorder => 530)
-    @toy_chest.assign_particles(@particles)
 
     @human = Human.create(:x => 300, :y => 300, :zorder => Z::PLAYER)
     @human.assign_particles(@particles)
@@ -89,7 +86,7 @@ class LivingRoom < Chingu::GameState
       unit.grab_toy(@particles, index)
     end
 
-    @toy_chest.collide_kids(@units, @particles)
+    @toy_chest.update_toys(@units, @particles)
 
     @particles.each { |particle|
       particle.get_coordinates
