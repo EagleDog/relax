@@ -110,10 +110,10 @@ class Player < Chingu::GameObject
 
   def collect_toys(particles)
     particles.each do |particle|
-      if !particle.held
+      if particle.held < -1
         if Gosu.distance(@x, @y, particle.x, particle.y) < 45
           @boom.play # if rand(4) == 1
-          particle.held = true
+          particle.held = -1
         end
       end
     end
