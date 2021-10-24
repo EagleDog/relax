@@ -32,9 +32,9 @@ end
 #
 #  END KNIGHT
 #    called in ending.rb, in Ending3 gamestate
-class EndKnight # < Chingu::GameObject
+class EndKnight  < Chingu::GameObject
   def setup
-    @image = Image["media/assets/knight_left.png"]
+    @image = Image["assets/characters/knight_left.png"]
   end
   def update
     @x -= 0.9  # EndKnight starts offscreen and continually moves to the left
