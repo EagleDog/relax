@@ -10,7 +10,6 @@ require_relative 'chingu/chingu'
 require_relative "rb/intro_objects.rb"
 require_relative "rb/beginning.rb"
 require_relative "rb/living_room.rb"
-require_relative "rb/keyboard"
 require_relative "rb/player"
 require_relative "rb/human"
 require_relative "rb/units"
