@@ -26,7 +26,7 @@ class Particle < Chingu::GameObject
     @air = 300
     @ground = rand(200) + 200
 
-    @held = false
+    @held = -2
     @direction = 1.0
     @offset_x = rand(11) / 10
     @offset_y = rand(11) / 10

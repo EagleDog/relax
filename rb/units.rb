@@ -2,7 +2,6 @@
 
 
 class Unit < Player
-  attr_reader :x, :y, :vel_x, :vel_y
   trait :timer
 #  traits :collision_detection, :bounding_box
   # trait :bounding_circle, :collision_detection #, :debug => true
@@ -33,6 +32,7 @@ class Unit < Player
     @down = false
     # @directions = {left: false, right: false, up: false, down: false}
     @walking = false
+    @has_toy = false
   end
 
   def ai
@@ -141,6 +141,19 @@ class Unit < Player
 
     end
 #    @dust_img = @dust0
+  end
+
+  def grab_toy(particles, index)
+    particles.each do |particle|
+      return if @has_toy
+      if particle.held < 0
+        if Gosu.distance(@x, @y, particle.x, particle.y) < 35
+          # @boom.play # if rand(4) == 1
+          particle.held = index
+          @has_toy = true
+        end
+      end
+    end
   end
 
 end

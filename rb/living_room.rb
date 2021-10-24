@@ -67,27 +67,33 @@ class LivingRoom < Chingu::GameState
 #    @player.update
 #    @player.collect_stars(@stars, @particles)
 
-    @units.each { |unit|  unit.get_coordinates
-                          unit.move 
-                          if @bumping == true
-                            unit.bump_others(@units, @particles) #, @player) }
-                          end
-                }
+    @player.collect_toys(@particles)
+
+    @units.each_with_index do |unit, index|
+      unit.get_coordinates
+      unit.move
+      if @bumping == true
+        unit.bump_others(@units, @particles) #, @player) }
+      end
+      unit.grab_toy(@particles, index)
+    end
 
     @toy_chest.collide_kids(@units, @particles)
 
     @particles.each { |particle|
       particle.get_coordinates
       particle.movement
-      if particle.held
+      if particle.held == -1
         particle.x = @player.x
         particle.y = @player.y
         particle.direction = @player.direction
+      elsif particle.held >= 0
+        unit = @units[particle.held]
+        particle.x = unit.x
+        particle.y = unit.y
+        particle.direction = unit.direction
       end
     }
-
-    @player.collect_toys(@particles)
-
 
 #    destroy_particles(@particles)
 
