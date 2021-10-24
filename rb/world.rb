@@ -15,8 +15,8 @@ class World < Chingu::Window
 
     @toy_chest = ToyChest.new
 
-    @player = Player.new
-    
+    @human = Human.new
+
     @chars = []
     30.times { @chars.push(Unit.new) }
 
@@ -28,7 +28,7 @@ class World < Chingu::Window
   end
 
   def make_particles
-    5.times {@particles.push(Particle.new(@player.x, @player.y)) }
+    5.times {@particles.push(Particle.new(@human.x, @human.y)) }
     @particles.each.reject
   end
 
@@ -39,37 +39,37 @@ class World < Chingu::Window
       end
     end
   end
-  
+
   def update
 
     keypress
 
-    @player.move
-    @player.collect_stars(@stars, @particles)
+    @human.move
+    @human.collect_stars(@stars, @particles)
 
     @chars.each { |char| char.move
                          char.collect_stars(@stars, @particles) }
 
     @particles.each { |particle| particle.movement }
     destroy_particles(@particles)
-    
+
     if rand(30) < 15 and @stars.size < 80
       3.times { @stars.push(Star.new(@star_anim)) }
     end
   end
-  
+
   def draw
     @img_back.draw(0, 0, Z::BACKGROUND)
     @toy_chest.draw
 
-    @player.draw
+    @human.draw
     @chars.each { |char| char.draw }
     @stars.each { |star| star.draw }
     @particles.each { |particle| particle.draw }
-    @font.draw_text("Score: #{@player.score}", 10, 10, Z::UI, 1.0, 1.0, Gosu::Color::YELLOW)
+    @font.draw_text("Score: #{@human.score}", 10, 10, Z::UI, 1.0, 1.0, Gosu::Color::YELLOW)
 
   end
-  
+
   def button_down(id)
     if id == Gosu::KB_ESCAPE
       close
