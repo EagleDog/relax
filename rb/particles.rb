@@ -3,7 +3,7 @@
 
 class Particle < Chingu::GameObject
   attr_reader :x, :y, :held
-  attr_writer :held, :direction
+  attr_writer :x, :y, :vel_x, :vel_y, :moving, :held, :direction
   trait :timer
 #  trait :bounding_circle, :debug # => true
 #  traits :velocity, :collision_detection
