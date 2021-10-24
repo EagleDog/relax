@@ -29,19 +29,19 @@ class ToyChest < Chingu::GameObject
 
   def toy_shower(particles)
     @contents.each do |pp|
-      next unless rand(2) == 1
+      next unless rand(40) == 1
       pp.vel_y = rand(10) - 20 # Vertical velocity
       pp.vel_x = rand(20) - 10
       pp.moving = true
       pp.stop_moving
 	  particles.push(pp)
 	end
-    @contents = []
+	@contents.reject! { |pp| particles.include? pp }
   end
 
   def update_toys(units, particles)
     units.each do |unit|
-      if Gosu.distance(@x + 100, @y + 50, unit.x, unit.y) < 40
+      if !unit.has_toy && Gosu.distance(@x + 100, @y + 50, unit.x, unit.y) < 40
         toy_shower(particles)
         play_time
       end

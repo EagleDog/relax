@@ -2,6 +2,7 @@
 
 
 class Unit < Player
+  attr_reader :has_toy
   trait :timer
 #  traits :collision_detection, :bounding_box
   # trait :bounding_circle, :collision_detection #, :debug => true
