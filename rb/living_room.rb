@@ -15,16 +15,27 @@ class LivingRoom < Chingu::GameState
 
     self.input = { :p => Pause, :r => lambda{ current_game_state.setup } }
 
+    @num_toys = 15
+    @num_kids = 4
 
     @img_back = Gosu::Image.new("assets/world.png")
 
-    @toy_chest = ToyChest.create(:x => 600, :y => 530, :zorder => 530)
-
     @particles = []
+    @num_toys.times do
+      pp = Particle.create(:x => rand(1100), :y => rand(700))
+      while pp.has_collisions
+        pp.x = rand(1100)
+        pp.y = rand(700)
+      end
+      @particles.push(pp)
+    end
+    @toy_chest = ToyChest.create(:x => 600, :y => 530, :zorder => 530)
+    @toy_chest.assign_particles(@particles)
+
     @human = Human.create(:x => 300, :y => 300, :zorder => Z::PLAYER)
     @human.assign_particles(@particles)
     @units = []
-    30.times { @units.push(Unit.create) }
+    @num_kids.times { @units.push(Unit.create) }
     @units.each { |unit| unit.new_spot }
 #   @star_anim = Gosu::Image::load_tiles("assets/star.png", 25, 25)
 #   @stars = []
