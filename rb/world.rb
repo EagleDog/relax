@@ -42,8 +42,6 @@ class World < Chingu::Window
 
   def update
 
-    keypress
-
     @human.move
     @human.collect_stars(@stars, @particles)
 

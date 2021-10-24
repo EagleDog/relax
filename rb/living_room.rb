@@ -63,7 +63,6 @@ class LivingRoom < Chingu::GameState
     super
 
     @human.get_coordinates
-    keypress
     @human.move
 #    @human.update
 #    @human.collect_stars(@stars, @particles)
