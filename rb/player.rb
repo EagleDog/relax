@@ -2,7 +2,7 @@
 
 
 class Player < Chingu::GameObject
-  attr_reader :score, :x, :y
+  attr_reader :score, :x, :y, :direction
 #  traits :collision_detection, :bounding_box
 
   def setup
@@ -104,14 +104,14 @@ class Player < Chingu::GameObject
   
 
   def grab_toy
-    
+
   end
 
 
   def collect_toys(particles)
     particles.each do |particle|
       if !particle.held
-        if Gosu.distance(@x, @y, particle.x, particle.y) < 35
+        if Gosu.distance(@x, @y, particle.x, particle.y) < 45
           @boom.play # if rand(4) == 1
           particle.held = true
         end

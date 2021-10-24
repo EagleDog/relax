@@ -3,6 +3,7 @@
 
 class Particle < Chingu::GameObject
   attr_reader :x, :y, :held
+  attr_writer :held, :direction
   trait :timer
 #  trait :bounding_circle, :debug # => true
 #  traits :velocity, :collision_detection
@@ -24,7 +25,12 @@ class Particle < Chingu::GameObject
     @prev_y = 0
     @air = 300
     @ground = rand(200) + 200
+
     @held = false
+    @direction = 1.0
+    @offset_x = rand(11) / 10
+    @offset_y = rand(11) / 10
+
     @moving = true
     stop_moving
   end
@@ -49,7 +55,7 @@ class Particle < Chingu::GameObject
   end
 
   def walls
-    if @x > 1050 then @x = 1050; @vel_x = -@vel_x end
+    if @x > 1040 then @x = 1040; @vel_x = -@vel_x end
     if @x < 50 then @x = 50; @vel_x = -@vel_x end
     if @y > 610 then @y = 610; @vel_y = -@vel_y end
     if @y < 70 then @y = 70; @vel_y = -@vel_y end
@@ -74,10 +80,10 @@ class Particle < Chingu::GameObject
   end
 
   def update
-    
+
   end
 
   def draw
-    @image.draw(@x, @y, @y + 10, 1.0, 1.0, @color)
+    @image.draw_rot(@x, @y, @y + 10, 0, @offset_x, @offset_y, @direction, 1.0, @color)
   end
 end
