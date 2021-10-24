@@ -27,20 +27,22 @@ class ToyChest < Chingu::GameObject
     #play sounds
   end
 
-#   def toy_shower(particles)
-#     during(150) {
-#       if rand(3) == 1
-#         1.times {particles.push(Particle.create(:x => @x + 100, :y => @y + 50))}
-#       end
-#     }
-#     after(200) { empty }
-#     after(5000) { full }
-#   end
+  def toy_shower(particles)
+    @contents.each do |pp|
+      next unless rand(2) == 1
+      pp.vel_y = rand(10) - 20 # Vertical velocity
+      pp.vel_x = rand(20) - 10
+      pp.moving = true
+      pp.stop_moving
+	  particles.push(pp)
+	end
+    @contents = []
+  end
 
   def update_toys(units, particles)
     units.each do |unit|
       if Gosu.distance(@x + 100, @y + 50, unit.x, unit.y) < 40
-        # toy_shower(particles) if @full_chest == true
+        toy_shower(particles)
         play_time
       end
     end

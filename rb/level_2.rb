@@ -5,8 +5,8 @@
 
 class Level2 < LivingRoom
   def initialize
-    @num_toys = 25
-    @num_kids = 14
+    @num_toys = 15
+    @num_kids = 6
     super
   end
 
