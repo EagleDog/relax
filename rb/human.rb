@@ -42,7 +42,7 @@ class Human < Player
       if particle.held == -1
         particle.held = -2
         particle.x += 50 * @direction
-        particle.y += 50 * @direction
+        particle.y += 50
       end
     end
   end
