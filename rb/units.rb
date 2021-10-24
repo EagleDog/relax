@@ -109,24 +109,7 @@ class Unit < Player
         if @has_toy != nil
           @bumps += 1
           if @bumps > 4
-            @has_toy.held = -2
-            @has_toy.moving = true
-            @has_toy.stop_moving
-            if rand(2) == 1
-              @has_toy.x += 35
-              @has_toy.vel_x = rand(15)
-            elsif
-              @has_toy.x -= 35
-              @has_toy.vel_x = -rand(15)
-            end
-            if rand(2) == 1
-              @has_toy.y += 35
-              @has_toy.vel_y = rand(15)
-            elsif
-              @has_toy.y -= 35
-              @has_toy.vel_y = -rand(15)
-            end
-            @has_toy = nil
+            throw_toy
           end
         end
 
@@ -134,6 +117,27 @@ class Unit < Player
       #   @dust_img = @dust0
       end
     end
+  end
+
+  def throw_toy
+    @has_toy.held = -2
+    @has_toy.moving = true
+    @has_toy.stop_moving
+    if rand(2) == 1
+      @has_toy.x += 35
+      @has_toy.vel_x = rand(15)
+    elsif
+      @has_toy.x -= 35
+      @has_toy.vel_x = -rand(15)
+    end
+    if rand(2) == 1
+      @has_toy.y += 35
+      @has_toy.vel_y = rand(15)
+    elsif
+      @has_toy.y -= 35
+      @has_toy.vel_y = -rand(15)
+    end
+    @has_toy = nil
   end
 
   def remove_dust
@@ -153,6 +157,9 @@ class Unit < Player
     collision_y
     walls
 #    object_collision
+    if @has_toy != nil && rand(200) == 1
+      throw_toy
+    end
     
     @vel_x *= 0.85
     @vel_y *= 0.85
