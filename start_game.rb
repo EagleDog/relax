@@ -45,7 +45,7 @@ class Game < Chingu::Window
 #                 [:q, :l] => :pop,
 #                 :z => :log,
 #                 :r => lambda{current_game_state.setup}
-                  :space => :begin
+                  # :space => :begin
                }
 #    retrofy
   end
