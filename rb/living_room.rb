@@ -79,6 +79,11 @@ class LivingRoom < Chingu::GameState
     @particles.each { |particle|
       particle.get_coordinates
       particle.movement
+      if particle.held
+        particle.x = @player.x
+        particle.y = @player.y
+        particle.direction = @player.direction
+      end
     }
 
     @player.collect_toys(@particles)
