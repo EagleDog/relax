@@ -13,7 +13,7 @@ require_relative "rb/living_room.rb"
 require_relative "rb/player"
 require_relative "rb/human"
 require_relative "rb/units"
-require_relative "rb/objects"
+require_relative "rb/toy_chest"
 require_relative "rb/map"
 require_relative "rb/particles"
 require_relative "rb/level_1"
@@ -21,8 +21,6 @@ require_relative "rb/level_2"
 require_relative "rb/level_3"
 require_relative "rb/ending"
 
-
-#require_relative "rb/gamestate"
 
 
 module Z   # zorder constants

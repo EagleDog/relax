@@ -1,7 +1,7 @@
 #
 #  BEGINNING GAMESTATE
-#    this gamestate essentially just plays the opening music and pushes the OpeningCredits gamestate
-class Beginning < Chingu::GameState #(Gamestate rescue Gosu::Window) # < Chingu::GameState
+#    plays opening music and pushes OpeningCredits
+class Beginning < Chingu::GameState
   trait :timer
   def setup
    self.input = { :esc => :exit } #, [:enter, :return] => Opening1, :p => Pause, :r => lambda{current_game_state.setup} }
@@ -14,8 +14,8 @@ end
 
 #
 #  PAUSE GAMESTATE
-#    pressing 'P' at any time pauses the current gamestate (except possibly during fades)
-class Pause <  Chingu::GameState #(Gamestate rescue Gosu::Window)
+#    pressing 'P' at any time pauses current gamestate (except possibly during fades)
+class Pause <  Chingu::GameState
   def initialize(options = {})
     super
     @title = Chingu::Text.create(:text=>"PAUSED (press 'P' to un-pause)", :y=>110, :size=>30, :color => Colors::Dark_Orange, :zorder=>1000 )

@@ -1,12 +1,7 @@
 # Encoding: UTF-8
 
-# global methods
+# global method
 
-
-# Solid at a given pixel position?
-def solid?(x, y)
-  y < 0 || @tiles[x / 50][y / 50]
-end
 
 
 def check_collisions(x, y)
@@ -23,13 +18,4 @@ def check_collisions(x, y)
 end
 
 
-
-
-
-
-class Map
-  def initialize
-
-  end
-end
 
