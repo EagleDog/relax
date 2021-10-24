@@ -20,7 +20,9 @@ class LivingRoom < Chingu::GameState
 
     @toy_chest = ToyChest.create(:x => 600, :y => 530, :zorder => 530)
 
+    @particles = []
     @human = Human.create(:x => 300, :y => 300, :zorder => Z::PLAYER)
+    @human.assign_particles(@particles)
     @units = []
     30.times { @units.push(Unit.create) }
     @units.each { |unit| unit.new_spot }
@@ -28,7 +30,6 @@ class LivingRoom < Chingu::GameState
 #   @stars = []
 #   @human.input = { :holding_space => make_particles }
 
-    @particles = []
     @font = Gosu::Font.new(20)
 
   end
