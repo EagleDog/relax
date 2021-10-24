@@ -20,13 +20,13 @@ class LivingRoom < Chingu::GameState
 
     @toy_chest = ToyChest.create(:x => 600, :y => 530, :zorder => 530)
 
-    @player = Player.create(:x => 300, :y => 300, :zorder => Z::PLAYER)
+    @human = Human.create(:x => 300, :y => 300, :zorder => Z::PLAYER)
     @units = []
     30.times { @units.push(Unit.create) }
     @units.each { |unit| unit.new_spot }
 #   @star_anim = Gosu::Image::load_tiles("assets/star.png", 25, 25)
 #   @stars = []
-#   @player.input = { :holding_space => make_particles }
+#   @human.input = { :holding_space => make_particles }
 
     @particles = []
     @font = Gosu::Font.new(20)
@@ -44,7 +44,7 @@ class LivingRoom < Chingu::GameState
 
 
   def make_particles
-    5.times { @particles.push(Particle.create(:x => @player.x, :y => @player.y)) } #new(@player.x, @player.y)) }
+    5.times { @particles.push(Particle.create(:x => @human.x, :y => @human.y)) } #new(@human.x, @human.y)) }
   end
 
   def destroy_particles(particles)
@@ -57,23 +57,22 @@ class LivingRoom < Chingu::GameState
 
 
 
-  
+
   def update
     super
 
-    @player.get_coordinates
-    keypress
-    @player.move
-#    @player.update
-#    @player.collect_stars(@stars, @particles)
+    @human.get_coordinates
+    @human.move
+#    @human.update
+#    @human.collect_stars(@stars, @particles)
 
-    @player.collect_toys(@particles)
+    @human.collect_toys(@particles)
 
     @units.each_with_index do |unit, index|
       unit.get_coordinates
       unit.move
       if @bumping == true
-        unit.bump_others(@units, @particles) #, @player) }
+        unit.bump_others(@units, @particles) #, @human) }
       end
       unit.grab_toy(@particles, index)
     end
@@ -84,9 +83,9 @@ class LivingRoom < Chingu::GameState
       particle.get_coordinates
       particle.movement
       if particle.held == -1
-        particle.x = @player.x
-        particle.y = @player.y
-        particle.direction = @player.direction
+        particle.x = @human.x
+        particle.y = @human.y
+        particle.direction = @human.direction
       elsif particle.held >= 0
         unit = @units[particle.held]
         particle.x = unit.x
@@ -98,7 +97,7 @@ class LivingRoom < Chingu::GameState
 #    destroy_particles(@particles)
 
 #    collision_check
-    
+
     # if rand(30) < 15 and @stars.size < 80
     #   3.times { @stars.push(Star.new(@star_anim)) }
     # end
@@ -113,14 +112,14 @@ class LivingRoom < Chingu::GameState
     @img_back.draw(0, 0, Z::BACKGROUND)
     @toy_chest.draw
 
-    @player.draw
+    @human.draw
     @units.each { |unit| unit.draw }
 #    @stars.each { |star| star.draw }
     @particles.each { |particle| particle.draw }
-    @font.draw_text("Score: #{@player.score}", 10, 10, Z::UI, 1.0, 1.0, Gosu::Color::YELLOW)
+    @font.draw_text("Score: #{@human.score}", 10, 10, Z::UI, 1.0, 1.0, Gosu::Color::YELLOW)
 
   end
-  
+
   # def button_down(id)
   #   if id == Gosu::KB_ESCAPE
   #     close
@@ -140,7 +139,7 @@ end
     end
   end
 
-  def screen_shake        
+  def screen_shake
     if @shaking == false   # if screen shake is cooled down
       game_objects.each do |object|  # move each object right, down, left, up, right, down, left, up
         object.x += 10
