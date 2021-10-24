@@ -32,7 +32,8 @@ class Unit < Player
     @down = false
     # @directions = {left: false, right: false, up: false, down: false}
     @walking = false
-    @has_toy = false
+    @has_toy = nil
+    @bumps = 0
   end
 
   def ai
@@ -104,6 +105,31 @@ class Unit < Player
         @y += 3 if rand(4) == 1
         @y -= 3 if rand(4) == 1
         collision_y
+
+        if @has_toy != nil
+          @bumps += 1
+          if @bumps > 4
+            @has_toy.held = -2
+            @has_toy.moving = true
+            @has_toy.stop_moving
+            if rand(2) == 1
+              @has_toy.x += 35
+              @has_toy.vel_x = rand(15)
+            elsif
+              @has_toy.x -= 35
+              @has_toy.vel_x = -rand(15)
+            end
+            if rand(2) == 1
+              @has_toy.y += 35
+              @has_toy.vel_y = rand(15)
+            elsif
+              @has_toy.y -= 35
+              @has_toy.vel_y = -rand(15)
+            end
+            @has_toy = nil
+          end
+        end
+
       # else
       #   @dust_img = @dust0
       end
@@ -145,12 +171,12 @@ class Unit < Player
 
   def grab_toy(particles, index)
     particles.each do |particle|
-      return if @has_toy
+      return if @has_toy != nil
       if particle.held < 0
         if Gosu.distance(@x, @y, particle.x, particle.y) < 35
           # @boom.play # if rand(4) == 1
           particle.held = index
-          @has_toy = true
+          @has_toy = particle
         end
       end
     end
